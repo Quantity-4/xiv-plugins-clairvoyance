@@ -1,0 +1,11 @@
+{
+    "Author": "Q4",
+    "Name": "Clairvoyance",
+    "Punchline": "Client-side server for player location display",
+    "Description": "Used as a client-side server to aid in real-time player display within XIV",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "dev",
+        "server"
+    ]
+}
