@@ -13,7 +13,7 @@ using Dalamud.Plugin.Services;
 // ReSharper disable CheckNamespace
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
-namespace Clairvoyance.Libraries
+namespace Clairvoyance.lib
 {
     // The utility functions to allow for easy command-creation was adapted from DalamudApi.cs
     // from the OOBPlugin by UnknownX7
@@ -59,7 +59,9 @@ namespace Clairvoyance.Libraries
 
         private static PluginCommandManager<IDalamudPlugin> pluginCommandManager;
 
-        public Helper() { }
+        public Helper()
+        {
+        }
 
         public Helper(IDalamudPlugin plugin) => pluginCommandManager ??= new(plugin);
 
@@ -104,11 +106,11 @@ namespace Clairvoyance.Libraries
         {
             plugin = p;
             pluginCommands = plugin
-                             .GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static |
-                                                   BindingFlags.Instance)
-                             .Where(method => method.GetCustomAttribute<CommandAttribute>() != null)
-                             .SelectMany(GetCommandInfoTuple)
-                             .ToArray();
+                .GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static |
+                                      BindingFlags.Instance)
+                .Where(method => method.GetCustomAttribute<CommandAttribute>() != null)
+                .SelectMany(GetCommandInfoTuple)
+                .ToArray();
 
             AddCommandHandlers();
         }
@@ -129,7 +131,7 @@ namespace Clairvoyance.Libraries
         {
             var handlerDelegate =
                 (CommandInfo.HandlerDelegate)Delegate.CreateDelegate(typeof(CommandInfo.HandlerDelegate), plugin,
-                                                                     method);
+                    method);
 
             var command = handlerDelegate.Method.GetCustomAttribute<CommandAttribute>();
             var aliases = handlerDelegate.Method.GetCustomAttribute<AliasesAttribute>();
@@ -184,7 +186,9 @@ namespace Clairvoyance.Libraries
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class DoNotShowInHelpAttribute : Attribute { }
+    public class DoNotShowInHelpAttribute : Attribute
+    {
+    }
 
     [AttributeUsage(AttributeTargets.Method)]
     public class HelpMessageAttribute : Attribute

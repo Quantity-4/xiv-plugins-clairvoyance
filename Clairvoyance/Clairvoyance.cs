@@ -1,9 +1,10 @@
 ﻿using System;
-using Clairvoyance.Libraries;
-using Clairvoyance.UI;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using static Clairvoyance.Libraries.Helper;
+using Clairvoyance.lib;
+using Clairvoyance.server;
+using Clairvoyance.UI;
+
 
 namespace Clairvoyance
 {
@@ -16,26 +17,26 @@ namespace Clairvoyance
         public static Clairvoyance? Plugin { get; private set; }
         public static Configuration? Configuration { get; private set; }
 
-        private readonly FrameworkHandler frameworkHandler;
+        private readonly FrameworkHandler _frameworkHandler;
 
         public Clairvoyance(DalamudPluginInterface pluginInterface)
         {
             Plugin = this;
 
-            Initialize(this, pluginInterface);
+            Helper.Initialize(this, pluginInterface);
 
-            Configuration = (Configuration)PluginInterface.GetPluginConfig()! ?? new();
+            Configuration = (Configuration)Helper.PluginInterface.GetPluginConfig()! ?? new();
             Configuration.Initialize();
 
+
             // Framework handler
-            this.frameworkHandler = new FrameworkHandler();
+            this._frameworkHandler = new FrameworkHandler();
 
             // User Interface
-            PluginInterface.UiBuilder.Draw += ConfigUI.Draw;
-            PluginInterface.UiBuilder.OpenConfigUi += ConfigUI.ToggleVisibility;
+            Helper.PluginInterface.UiBuilder.Draw += ConfigUI.Draw;
+            Helper.PluginInterface.UiBuilder.OpenConfigUi += ConfigUI.ToggleVisibility;
 
-
-            Framework.Update += this.FrameworkOnOnUpdateEvent;
+            Helper.Framework.Update += this.FrameworkOnOnUpdateEvent;
         }
 
         void FrameworkOnOnUpdateEvent(IFramework framework)
@@ -62,7 +63,7 @@ namespace Clairvoyance
         [HelpMessage("Lists all the players in the area, and their coordinates")]
         private void OnPlayerList(string command, string args)
         {
-            frameworkHandler.Update();
+            _frameworkHandler.Update();
         }
 
         // --- Dispose ---
@@ -74,8 +75,8 @@ namespace Clairvoyance
             if (!disposing) return;
 
             //Config.Save();
-            PluginInterface.UiBuilder.Draw -= ConfigUI.Draw;
-            PluginInterface.UiBuilder.OpenConfigUi -= ConfigUI.ToggleVisibility;
+            Helper.PluginInterface.UiBuilder.Draw -= ConfigUI.Draw;
+            Helper.PluginInterface.UiBuilder.OpenConfigUi -= ConfigUI.ToggleVisibility;
 
             // Static
             Helper.Dispose();

@@ -13,4 +13,8 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="EmbedIO" Version="3.5.2" />
+  </ItemGroup>
+
 </Project>

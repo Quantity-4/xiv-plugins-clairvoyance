@@ -1,4 +1,4 @@
-﻿using Clairvoyance.Libraries;
+﻿using Clairvoyance.lib;
 using Dalamud.Configuration;
 
 namespace Clairvoyance

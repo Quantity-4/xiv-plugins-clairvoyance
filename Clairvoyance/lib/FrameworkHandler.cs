@@ -1,4 +1,5 @@
 using System;
+using Clairvoyance.server;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.Group;
@@ -6,11 +7,17 @@ using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.UI.Info;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
-namespace Clairvoyance.Libraries;
-
+namespace Clairvoyance.lib;
 
 public class FrameworkHandler : IDisposable
 {
+    private readonly Server _server;
+
+    public FrameworkHandler()
+    {
+        // Data Server
+        this._server = new Server();
+    }
 
     public unsafe void Update()
     {
@@ -53,8 +60,30 @@ public class FrameworkHandler : IDisposable
 
         // We now have a 'character' as a PlayerCharacter object
         Helper.ChatGui.Print(
-            $"Character: {playerObject.Name}\n-- World: {playerObject.HomeWorld.GetWithLanguage(ClientLanguage.English)}"
+            $"Character: {playerObject.Name}\n-- World: {playerObject.HomeWorld.Id}" +
+            $"\n-- Position --" +
+            $"\n-- X: {playerObject.Position.X}" +
+            $"\n-- Y: {playerObject.Position.Y}" +
+            $"\n-- Z: {playerObject.Position.Z}"
         );
+
+        // TODO: Implement some sort of map id retrieval system thing... at some point
+        AppendPlayerDetailsToServer(
+            "limsa", playerObject.Name.TextValue,
+            (int)playerObject.HomeWorld.Id,
+            playerObject.Position.X,
+            playerObject.Position.Y,
+            playerObject.Position.Z
+        );
+    }
+
+    /*
+     * Call server update function with appropriate details
+     */
+    private void AppendPlayerDetailsToServer(string mapId, string playerName, int homeWorldId, float posX, float posY,
+        float posZ)
+    {
+        this._server.Update(mapId, playerName, homeWorldId, posX, posY, posZ);
     }
 
     private static unsafe bool IsObjectIdInParty(uint objectId)
@@ -109,6 +138,6 @@ public class FrameworkHandler : IDisposable
 
     public void Dispose()
     {
-        // TODO
+        _server?.Dispose();
     }
 }
