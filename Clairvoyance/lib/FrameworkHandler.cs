@@ -58,22 +58,14 @@ public class FrameworkHandler : IDisposable
         // Processing logic [assuming we are within an iteration]
         var playerObject = (PlayerCharacter)currentObjectId;
 
-        // We now have a 'character' as a PlayerCharacter object
-        Helper.ChatGui.Print(
-            $"Character: {playerObject.Name}\n-- World: {playerObject.HomeWorld.Id}" +
-            $"\n-- Position --" +
-            $"\n-- X: {playerObject.Position.X}" +
-            $"\n-- Y: {playerObject.Position.Y}" +
-            $"\n-- Z: {playerObject.Position.Z}"
-        );
-
         // TODO: Implement some sort of map id retrieval system thing... at some point
+        // We've flipped around Y/Z as Y is the height in this instance - but we dont want that >: [
         AppendPlayerDetailsToServer(
-            "limsa", playerObject.Name.TextValue,
+            "limsa-lower-decks", playerObject.Name.TextValue,
             (int)playerObject.HomeWorld.Id,
-            playerObject.Position.X,
-            playerObject.Position.Y,
-            playerObject.Position.Z
+            (playerObject.Position.X + 512) * 2,
+            (playerObject.Position.Z + 512) * 2,
+            playerObject.Position.Y
         );
     }
 
@@ -133,6 +125,11 @@ public class FrameworkHandler : IDisposable
         {
             return UnsafeArrayEqual(a1, arr2, len);
         }
+    }
+
+    public void ClearAllMapData()
+    {
+        _server.ClearMapData();
     }
 
 

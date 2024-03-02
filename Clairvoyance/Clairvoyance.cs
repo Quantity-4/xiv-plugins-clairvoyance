@@ -39,6 +39,7 @@ namespace Clairvoyance
             Helper.Framework.Update += this.FrameworkOnOnUpdateEvent;
         }
 
+
         void FrameworkOnOnUpdateEvent(IFramework framework)
         {
             if (this.Disable)
@@ -52,8 +53,7 @@ namespace Clairvoyance
             }
             else
             {
-                // TODO: ADD HERE/UNCOMMENT TO UPDATE ON EVERY FRAME
-                // frameworkHandler.Update();
+                _frameworkHandler.Update();
             }
         }
 
@@ -64,6 +64,14 @@ namespace Clairvoyance
         private void OnPlayerList(string command, string args)
         {
             _frameworkHandler.Update();
+        }
+
+        [Command("/clearmapdata")]
+        [Aliases("/clearmd")]
+        [HelpMessage("Clears all the map data")]
+        private void OnClearAllMapData(string command, string args)
+        {
+            _frameworkHandler.ClearAllMapData();
         }
 
         // --- Dispose ---
@@ -82,6 +90,7 @@ namespace Clairvoyance
             Helper.Dispose();
 
             // Dynamic
+            _frameworkHandler.Dispose();
         }
 
         public void Dispose()
